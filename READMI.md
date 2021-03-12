@@ -319,6 +319,7 @@
 Временные файлы можно найти:
 
 [root@ns01 vagrant]# ls -l /etc/named/dynamic/
+
                 total 32
                -rw-rw-rw-. 1 named named 509 Mar 12 07:31 named.ddns.lab
                -rw-rw-rw-. 1 named named 509 Mar 12 07:31 named.ddns.lab.view1
