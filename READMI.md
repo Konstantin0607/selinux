@@ -22,6 +22,7 @@
             systemctl status nginx.service
 
 #вывод
+
            Mar 12 06:09:44 SELinux systemd[1]: Starting The nginx HTTP and reverse proxy server...
            Mar 12 06:09:44 SELinux nginx[3960]: nginx: the configuration file /etc/nginx/nginx.conf syntax is ok
            Mar 12 06:09:44 SELinux nginx[3960]: nginx: [emerg] bind() to 0.0.0.0:12345 failed (13: Permission denied)
@@ -318,15 +319,15 @@
 Временные файлы можно найти:
 
 [root@ns01 vagrant]# ls -l /etc/named/dynamic/
-total 32
--rw-rw-rw-. 1 named named 509 Mar 12 07:31 named.ddns.lab
--rw-rw-rw-. 1 named named 509 Mar 12 07:31 named.ddns.lab.view1
--rw-r--r--. 1 named named 700 Mar 12 08:21 named.ddns.lab.view1.jnl
--rw-r--r--. 1 named named 348 Mar 12 07:30 tmp-6OGP6YASy1
--rw-r--r--. 1 named named 348 Mar 12 08:34 tmp-HUsH1RRHBF
--rw-r--r--. 1 named named 348 Mar 12 08:07 tmp-OEmMkfw6J6
--rw-r--r--. 1 named named 348 Mar 12 08:59 tmp-R8cPmFCasl
--rw-r--r--. 1 named named 348 Mar 12 08:57 tmp-csgM4QDJR7
+                total 32
+               -rw-rw-rw-. 1 named named 509 Mar 12 07:31 named.ddns.lab
+               -rw-rw-rw-. 1 named named 509 Mar 12 07:31 named.ddns.lab.view1
+               -rw-r--r--. 1 named named 700 Mar 12 08:21 named.ddns.lab.view1.jnl
+               -rw-r--r--. 1 named named 348 Mar 12 07:30 tmp-6OGP6YASy1
+               -rw-r--r--. 1 named named 348 Mar 12 08:34 tmp-HUsH1RRHBF
+               -rw-r--r--. 1 named named 348 Mar 12 08:07 tmp-OEmMkfw6J6
+               -rw-r--r--. 1 named named 348 Mar 12 08:59 tmp-R8cPmFCasl
+               -rw-r--r--. 1 named named 348 Mar 12 08:57 tmp-csgM4QDJR7
 
 
 #Считаю что можно использовать или компиляцию модулей SELINUX или изменения контекста безопасности для файлов SELINUX
