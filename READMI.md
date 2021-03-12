@@ -1,50 +1,50 @@
-# запускаем Vagrantfile
+# Р·Р°РїСѓСЃРєР°РµРј Vagrantfile
 
            vagrant up
 
 
-#1.Запустить nginx на нестандартном порту 3-мя разными способами:
-#Для начала установим 
+#1.Р—Р°РїСѓСЃС‚РёС‚СЊ nginx РЅР° РЅРµСЃС‚Р°РЅРґР°СЂС‚РЅРѕРј РїРѕСЂС‚Сѓ 3-РјСЏ СЂР°Р·РЅС‹РјРё СЃРїРѕСЃРѕР±Р°РјРё:
+#Р”Р»СЏ РЅР°С‡Р°Р»Р° СѓСЃС‚Р°РЅРѕРІРёРј 
 
            yum install -y nginx
 
-#Для того чтобы работать с политиками установим semanage:
+#Р”Р»СЏ С‚РѕРіРѕ С‡С‚РѕР±С‹ СЂР°Р±РѕС‚Р°С‚СЊ СЃ РїРѕР»РёС‚РёРєР°РјРё СѓСЃС‚Р°РЅРѕРІРёРј semanage:
 
            yum -y install policycoreutils-python
 
-#1.1 переключатели setsebool;
-# В конфигурационном файле nginx правим стандартный порт на 12345
+#1.1 РїРµСЂРµРєР»СЋС‡Р°С‚РµР»Рё setsebool;
+# Р’ РєРѕРЅС„РёРіСѓСЂР°С†РёРѕРЅРЅРѕРј С„Р°Р№Р»Рµ nginx РїСЂР°РІРёРј СЃС‚Р°РЅРґР°СЂС‚РЅС‹Р№ РїРѕСЂС‚ РЅР° 12345
 
            nano /etc/nginx/nginx.conf
 
-#Запускаем nginx, смотрим статус и видим ошибку:
+#Р—Р°РїСѓСЃРєР°РµРј nginx, СЃРјРѕС‚СЂРёРј СЃС‚Р°С‚СѓСЃ Рё РІРёРґРёРј РѕС€РёР±РєСѓ:
 
             systemctl status nginx.service
 
-#вывод
+#РІС‹РІРѕРґ
            Mar 12 06:09:44 SELinux systemd[1]: Starting The nginx HTTP and reverse proxy server...
            Mar 12 06:09:44 SELinux nginx[3960]: nginx: the configuration file /etc/nginx/nginx.conf syntax is ok
            Mar 12 06:09:44 SELinux nginx[3960]: nginx: [emerg] bind() to 0.0.0.0:12345 failed (13: Permission denied)
            Mar 12 06:09:44 SELinux nginx[3960]: nginx: configuration file /etc/nginx/nginx.conf test failed
 
-#Далее выполняем команду, для того чтобы понять какой логический тип включать
+#Р”Р°Р»РµРµ РІС‹РїРѕР»РЅСЏРµРј РєРѕРјР°РЅРґСѓ, РґР»СЏ С‚РѕРіРѕ С‡С‚РѕР±С‹ РїРѕРЅСЏС‚СЊ РєР°РєРѕР№ Р»РѕРіРёС‡РµСЃРєРёР№ С‚РёРї РІРєР»СЋС‡Р°С‚СЊ
 
            audit2why < /var/log/audit/audit.log
 
 
-#Утилита audit2why рекомендует выполнить команду setsebool -P nis_enabled 1
-#ключ -P сохранит правило и после перезагрузки. Выполняем команду без ключа -P
+#РЈС‚РёР»РёС‚Р° audit2why СЂРµРєРѕРјРµРЅРґСѓРµС‚ РІС‹РїРѕР»РЅРёС‚СЊ РєРѕРјР°РЅРґСѓ setsebool -P nis_enabled 1
+#РєР»СЋС‡ -P СЃРѕС…СЂР°РЅРёС‚ РїСЂР°РІРёР»Рѕ Рё РїРѕСЃР»Рµ РїРµСЂРµР·Р°РіСЂСѓР·РєРё. Р’С‹РїРѕР»РЅСЏРµРј РєРѕРјР°РЅРґСѓ Р±РµР· РєР»СЋС‡Р° -P
 
            setsebool nis_enabled 1
 
-#После этого веб-сервер nginx успешно запускается,запускаем его и смотрим статус
+#РџРѕСЃР»Рµ СЌС‚РѕРіРѕ РІРµР±-СЃРµСЂРІРµСЂ nginx СѓСЃРїРµС€РЅРѕ Р·Р°РїСѓСЃРєР°РµС‚СЃСЏ,Р·Р°РїСѓСЃРєР°РµРј РµРіРѕ Рё СЃРјРѕС‚СЂРёРј СЃС‚Р°С‚СѓСЃ
 
            systemctl start nginx.service
 
            systemctl status nginx.service
 
 
-#вывод
+#РІС‹РІРѕРґ
 
             nginx.service - The nginx HTTP and reverse proxy server
             Loaded: loaded (/usr/lib/systemd/system/nginx.service; disabled; vendor preset: disabled)
@@ -58,12 +58,12 @@
                   L-25161 nginx: worker process
 
 
-#1.2 добавление нестандартного порта в имеющийся тип;
-#Смотрим какие порты могут работать по http, видим что нашего порта там нет
+#1.2 РґРѕР±Р°РІР»РµРЅРёРµ РЅРµСЃС‚Р°РЅРґР°СЂС‚РЅРѕРіРѕ РїРѕСЂС‚Р° РІ РёРјРµСЋС‰РёР№СЃСЏ С‚РёРї;
+#РЎРјРѕС‚СЂРёРј РєР°РєРёРµ РїРѕСЂС‚С‹ РјРѕРіСѓС‚ СЂР°Р±РѕС‚Р°С‚СЊ РїРѕ http, РІРёРґРёРј С‡С‚Рѕ РЅР°С€РµРіРѕ РїРѕСЂС‚Р° С‚Р°Рј РЅРµС‚
 
            semanage port -l | grep http
 
-#вывод
+#РІС‹РІРѕРґ
 
            http_cache_port_t              tcp      8080, 8118, 8123, 10001-10010
            http_cache_port_t              udp      3130
@@ -71,15 +71,15 @@
            pegasus_http_port_t            tcp      5988
            pegasus_https_port_t           tcp      5989
 
-#добавляем наш нестандартный порт в правило политики
+#РґРѕР±Р°РІР»СЏРµРј РЅР°С€ РЅРµСЃС‚Р°РЅРґР°СЂС‚РЅС‹Р№ РїРѕСЂС‚ РІ РїСЂР°РІРёР»Рѕ РїРѕР»РёС‚РёРєРё
 
            semanage port -a -t http_port_t -p tcp 12345
 
-#Проверяем порты доступные для http
+#РџСЂРѕРІРµСЂСЏРµРј РїРѕСЂС‚С‹ РґРѕСЃС‚СѓРїРЅС‹Рµ РґР»СЏ http
 
            semanage port -l | grep http
 
-#вывод
+#РІС‹РІРѕРґ
 
            http_cache_port_t              tcp      8080, 8118, 8123, 10001-10010
            http_cache_port_t              udp      3130
@@ -88,13 +88,13 @@
            pegasus_https_port_t           tcp      5989
 
 
-#Теперь веб-сервер nginx запускается на нашем нестандартном порту, проверяем
+#РўРµРїРµСЂСЊ РІРµР±-СЃРµСЂРІРµСЂ nginx Р·Р°РїСѓСЃРєР°РµС‚СЃСЏ РЅР° РЅР°С€РµРј РЅРµСЃС‚Р°РЅРґР°СЂС‚РЅРѕРј РїРѕСЂС‚Сѓ, РїСЂРѕРІРµСЂСЏРµРј
 
            systemctl start nginx.service
 
            systemctl status nginx.service
 
-#вывод
+#РІС‹РІРѕРґ
 
            ? nginx.service - The nginx HTTP and reverse proxy server
              Loaded: loaded (/usr/lib/systemd/system/nginx.service; disabled; vendor preset: disabled)
@@ -107,15 +107,15 @@
                  +-1166 nginx: master process /usr/sbin/nginx
                  L-1167 nginx: worker process
 
-#1.3 формирование и установка модуля SELinux
-# Компилируем модуль на основе файла аудита
+#1.3 С„РѕСЂРјРёСЂРѕРІР°РЅРёРµ Рё СѓСЃС‚Р°РЅРѕРІРєР° РјРѕРґСѓР»СЏ SELinux
+# РљРѕРјРїРёР»РёСЂСѓРµРј РјРѕРґСѓР»СЊ РЅР° РѕСЃРЅРѕРІРµ С„Р°Р№Р»Р° Р°СѓРґРёС‚Р°
 
-#выполняем команду
+#РІС‹РїРѕР»РЅСЏРµРј РєРѕРјР°РЅРґСѓ
 
            audit2allow -M httpd_add --debug < /var/log/audit/audit.log
 
 
-#вывод
+#РІС‹РІРѕРґ
     
             audit2allow -M httpd_add --debug < /var/log/audit/audit.log
             ******************** IMPORTANT ***********************
@@ -131,24 +131,24 @@
              -rw-------. 1 root root 5300 Apr 30  2020 original-ks.cfg
 
 
-#Исталлируем наш созданный модуль и проверяем
+#РСЃС‚Р°Р»Р»РёСЂСѓРµРј РЅР°С€ СЃРѕР·РґР°РЅРЅС‹Р№ РјРѕРґСѓР»СЊ Рё РїСЂРѕРІРµСЂСЏРµРј
 
            semodule -i httpd_add.pp
 
            semodule -l | grep http
 
-#вывод 
+#РІС‹РІРѕРґ 
          
            httpd_add       1.0
 
-#Наш веб-сервер теперь должен  работать на порту 12345,проверяем
+#РќР°С€ РІРµР±-СЃРµСЂРІРµСЂ С‚РµРїРµСЂСЊ РґРѕР»Р¶РµРЅ  СЂР°Р±РѕС‚Р°С‚СЊ РЅР° РїРѕСЂС‚Сѓ 12345,РїСЂРѕРІРµСЂСЏРµРј
 
 
            systemctl start nginx.service
 
            systemctl status nginx.service
 
-#вывод
+#РІС‹РІРѕРґ
      
             nginx.service - The nginx HTTP and reverse proxy server
             Loaded: loaded (/usr/lib/systemd/system/nginx.service; disabled; vendor preset: disabled)
@@ -162,8 +162,8 @@
                  L-989 nginx: worker process
 
 
-#2.Обеспечить работоспособность приложения при включенном selinux
-#Подключаемся к клиентской машине vagrant ssh client и пробуем выполнить команды:
+#2.РћР±РµСЃРїРµС‡РёС‚СЊ СЂР°Р±РѕС‚РѕСЃРїРѕСЃРѕР±РЅРѕСЃС‚СЊ РїСЂРёР»РѕР¶РµРЅРёСЏ РїСЂРё РІРєР»СЋС‡РµРЅРЅРѕРј selinux
+#РџРѕРґРєР»СЋС‡Р°РµРјСЃСЏ Рє РєР»РёРµРЅС‚СЃРєРѕР№ РјР°С€РёРЅРµ vagrant ssh client Рё РїСЂРѕР±СѓРµРј РІС‹РїРѕР»РЅРёС‚СЊ РєРѕРјР°РЅРґС‹:
 
            nsupdate -k /etc/named.zonetransfer.key
            server 192.168.50.10
@@ -171,21 +171,21 @@
            update add www.ddns.lab. 60 A 192.168.50.15
            send
 
-# Получаем ошибку обновление не удалось: SERVFAIL 
-# Для того, чтобы решить эту задачу, необходимо создать некоторое количество модулей
-# по конкретным ошибкам (поскольку решаем одну ошибку SELINUX появляется другая) на сервере DNS,
-# которые описываются в файлах / var / log / audit / audit .log и / var / log / messages,
-# а также для отлавнивания ошибок я использовал systemctl status с именем,
-# после перезапуска процесса BIND сервера, там также предоставлял ошибки.
+# РџРѕР»СѓС‡Р°РµРј РѕС€РёР±РєСѓ РѕР±РЅРѕРІР»РµРЅРёРµ РЅРµ СѓРґР°Р»РѕСЃСЊ: SERVFAIL 
+# Р”Р»СЏ С‚РѕРіРѕ, С‡С‚РѕР±С‹ СЂРµС€РёС‚СЊ СЌС‚Сѓ Р·Р°РґР°С‡Сѓ, РЅРµРѕР±С…РѕРґРёРјРѕ СЃРѕР·РґР°С‚СЊ РЅРµРєРѕС‚РѕСЂРѕРµ РєРѕР»РёС‡РµСЃС‚РІРѕ РјРѕРґСѓР»РµР№
+# РїРѕ РєРѕРЅРєСЂРµС‚РЅС‹Рј РѕС€РёР±РєР°Рј (РїРѕСЃРєРѕР»СЊРєСѓ СЂРµС€Р°РµРј РѕРґРЅСѓ РѕС€РёР±РєСѓ SELINUX РїРѕСЏРІР»СЏРµС‚СЃСЏ РґСЂСѓРіР°СЏ) РЅР° СЃРµСЂРІРµСЂРµ DNS,
+# РєРѕС‚РѕСЂС‹Рµ РѕРїРёСЃС‹РІР°СЋС‚СЃСЏ РІ С„Р°Р№Р»Р°С… / var / log / audit / audit .log Рё / var / log / messages,
+# Р° С‚Р°РєР¶Рµ РґР»СЏ РѕС‚Р»Р°РІРЅРёРІР°РЅРёСЏ РѕС€РёР±РѕРє СЏ РёСЃРїРѕР»СЊР·РѕРІР°Р» systemctl status СЃ РёРјРµРЅРµРј,
+# РїРѕСЃР»Рµ РїРµСЂРµР·Р°РїСѓСЃРєР° РїСЂРѕС†РµСЃСЃР° BIND СЃРµСЂРІРµСЂР°, С‚Р°Рј С‚Р°РєР¶Рµ РїСЂРµРґРѕСЃС‚Р°РІР»СЏР» РѕС€РёР±РєРё.
 
-# Какой алгоритм решил проблему: 
+# РљР°РєРѕР№ Р°Р»РіРѕСЂРёС‚Рј СЂРµС€РёР» РїСЂРѕР±Р»РµРјСѓ: 
 
-#1.Нам нужно убрать все исключения и ошибки по линии SELINUX,
-# чтобы система безопасности перестала ругаться
+#1.РќР°Рј РЅСѓР¶РЅРѕ СѓР±СЂР°С‚СЊ РІСЃРµ РёСЃРєР»СЋС‡РµРЅРёСЏ Рё РѕС€РёР±РєРё РїРѕ Р»РёРЅРёРё SELINUX,
+# С‡С‚РѕР±С‹ СЃРёСЃС‚РµРјР° Р±РµР·РѕРїР°СЃРЅРѕСЃС‚Рё РїРµСЂРµСЃС‚Р°Р»Р° СЂСѓРіР°С‚СЊСЃСЏ
 
            audit2why < /var/log/audit/audit.log
 
-#вывод
+#РІС‹РІРѕРґ
 
            root@ns01 vagrant]# audit2why < /var/log/audit/audit.log
            type=AVC msg=audit(1587231618.482:1955): avc:  denied  { search } for  pid=7268 comm="isc-worker0000" name="net" dev="proc" ino=33134 scontext=system_u:system_r:named_t:s0 tcontext=system_u:object_r:sysctl_net_t:s0 tclass=dir permissive=0
@@ -203,63 +203,63 @@
 	                   You can use audit2allow to generate a loadable module to allow this access. 
 
 
-#Далее выполняем команды:
+#Р”Р°Р»РµРµ РІС‹РїРѕР»РЅСЏРµРј РєРѕРјР°РЅРґС‹:
 
            audit2allow -M named-selinux --debug < /var/log/audit/audit.log 
 
            semodule -i named-selinux.pp
 
 
-# Проблема не ушла, видим новые ошибки:
+# РџСЂРѕР±Р»РµРјР° РЅРµ СѓС€Р»Р°, РІРёРґРёРј РЅРѕРІС‹Рµ РѕС€РёР±РєРё:
 
             [root@ns01 vagrant]# cat /var/log/messages | grep ausearch
             Mar 12 07:27:01 localhost python: SELinux is preventing /usr/sbin/named from search access on the directory net.#012#012*****  Plugin catchall (100. confidence) suggests   **************************#012#012If you believe that named should be allowed search access on the net directory by default.#012Then you should report this as a bug.#012You can generate a local policy module to allow this access.#012Do#012allow this access for now by executing:#012# ausearch -c 'isc-worker0000' --raw | audit2allow -M my-iscworker0000#012# semodule -i my-iscworker0000.pp#012
 
                
-# Выполняем команду:
+# Р’С‹РїРѕР»РЅСЏРµРј РєРѕРјР°РЅРґСѓ:
 
            ausearch -c 'isc-worker0000' --raw | audit2allow -M my-iscworker0000 | semodule -i my-iscworker0000.pp
 
 
-# Проблема так и не решилась, смотрим дальше что пишет лог / var / log / messages:
+# РџСЂРѕР±Р»РµРјР° С‚Р°Рє Рё РЅРµ СЂРµС€РёР»Р°СЃСЊ, СЃРјРѕС‚СЂРёРј РґР°Р»СЊС€Рµ С‡С‚Рѕ РїРёС€РµС‚ Р»РѕРі / var / log / messages:
  
            Mar 12 07:29:47 localhost python: SELinux is preventing /usr/sbin/named from read access on the file ip_local_port_range.#012#012*****  Plugin catchall (100. confidence) suggests   **************************#012#012If you believe that named should be allowed read access on the ip_local_port_range file by default.#012Then you should report this as a bug.#012You can generate a local policy module to allow this access.#012Do#012allow this access for now by executing:#012# ausearch -c 'isc-worker0000' --raw | audit2allow -M my-iscworker0000#012# semodule -i my-iscworker0000.pp#012
            
 
-# Здесь у файла DNS сервера нет доступа прочитать файл ip_local_port_range 
-# выполняем команду:
+# Р—РґРµСЃСЊ Сѓ С„Р°Р№Р»Р° DNS СЃРµСЂРІРµСЂР° РЅРµС‚ РґРѕСЃС‚СѓРїР° РїСЂРѕС‡РёС‚Р°С‚СЊ С„Р°Р№Р» ip_local_port_range 
+# РІС‹РїРѕР»РЅСЏРµРј РєРѕРјР°РЅРґСѓ:
 
            ausearch -c 'isc-worker0000' --raw | audit2allow -M my-iscworker0001 | semodule -i my-iscworker0001.pp
 
-# Не помогает идем дальше:
+# РќРµ РїРѕРјРѕРіР°РµС‚ РёРґРµРј РґР°Р»СЊС€Рµ:
 
            Mar 12 07:34:27 localhost python: SELinux is preventing /usr/sbin/named from open access on the file /proc/sys/net/ipv4/ip_local_port_range.#012#012*****  Plugin catchall (100. confidence) suggests   **************************#012#012If you believe that named should be allowed open access on the ip_local_port_range file by default.#012Then you should report this as a bug.#012You can generate a local policy module to allow this access.#012Do#012allow this access for now by executing:#012# ausearch -c 'isc-worker0000' --raw | audit2allow -M my-iscworker0000#012# semodule -i my-iscworker0000.pp#012
 
-# Нужно выполнить команду:
+# РќСѓР¶РЅРѕ РІС‹РїРѕР»РЅРёС‚СЊ РєРѕРјР°РЅРґСѓ:
 
            ausearch -c 'isc-worker0000' --raw | audit2allow -M my-iscworker0002 | semodule -i my-iscworker0002.pp
 
-# Не помогает идем дальше:
+# РќРµ РїРѕРјРѕРіР°РµС‚ РёРґРµРј РґР°Р»СЊС€Рµ:
 
            Mar 12 07:39:18 localhost python: SELinux is preventing /usr/sbin/named from getattr access on the file /proc/sys/net/ipv4/ip_local_port_range.#012#012*****  Plugin catchall (100. confidence) suggests   **************************#012#012If you believe that named should be allowed getattr access on the ip_local_port_range file by default.#012Then you should report this as a bug.#012You can generate a local policy module to allow this access.#012Do#012allow this access for now by executing:#012# ausearch -c 'isc-worker0000' --raw | audit2allow -M my-iscworker0000#012# semodule -i my-iscworker0000.pp#012
 
 
-# Нужно выполнить команду:
+# РќСѓР¶РЅРѕ РІС‹РїРѕР»РЅРёС‚СЊ РєРѕРјР°РЅРґСѓ:
 
            ausearch -c 'isc-worker0000' --raw | audit2allow -M my-iscworker0003 | semodule -i my-iscworker0003.pp
 
 
-# Не помогает, идем дальше:
+# РќРµ РїРѕРјРѕРіР°РµС‚, РёРґРµРј РґР°Р»СЊС€Рµ:
 
            Mar 12 07:44:51 localhost python: SELinux is preventing isc-worker0000 from create access on the file named.ddns.lab.view1.jnl.#012#012*****  Plugin catchall_labels (83.8 confidence) suggests   *******************#012#012If you want to allow isc-worker0000 to have create access on the named.ddns.lab.view1.jnl file#012Then you need to change the label on named.ddns.lab.view1.jnl#012Do#012# semanage fcontext -a -t FILE_TYPE 'named.ddns.lab.view1.jnl'#012where FILE_TYPE is one of the following: dnssec_trigger_var_run_t, ipa_var_lib_t, krb5_host_rcache_t, krb5_keytab_t, named_cache_t, named_log_t, named_tmp_t, named_var_run_t, named_zone_t.#012Then execute:#012restorecon -v 'named.ddns.lab.view1.jnl'#012#012#012*****  Plugin catchall (17.1 confidence) suggests   **************************#012#012If you believe that isc-worker0000 should be allowed create access on the named.ddns.lab.view1.jnl file by default.#012Then you should report this as a bug.#012You can generate a local policy module to allow this access.#012Do#012allow this access for now by executing:#012# ausearch -c 'isc-worker0000' --raw | audit2allow -M my-iscworker0000#012# semodule -i my-iscworker0000.pp#012
 
 
-# Нужно выполнить команду:
+# РќСѓР¶РЅРѕ РІС‹РїРѕР»РЅРёС‚СЊ РєРѕРјР°РЅРґСѓ:
 
            ausearch -c 'isc-worker0000' --raw | audit2allow -M my-iscworker0004 | semodule -i my-iscworker0004.pp
 
 
-# После чего в файле / var / log / messages перестают появляться, но ошибки есть в выводе команды systemctl status с именем:
+# РџРѕСЃР»Рµ С‡РµРіРѕ РІ С„Р°Р№Р»Рµ / var / log / messages РїРµСЂРµСЃС‚Р°СЋС‚ РїРѕСЏРІР»СЏС‚СЊСЃСЏ, РЅРѕ РѕС€РёР±РєРё РµСЃС‚СЊ РІ РІС‹РІРѕРґРµ РєРѕРјР°РЅРґС‹ systemctl status СЃ РёРјРµРЅРµРј:
 
            [root@ns01 vagrant]# systemctl status named
            ? named.service - Berkeley Internet Name Domain (DNS)
@@ -283,9 +283,9 @@
            Mar 12 07:51:32 ns01 named[7031]: zone ddns.lab/IN/view1: journal rollforward failed: no more
            Mar 12 07:51:32 ns01 named[7031]: zone ddns.lab/IN/view1: not loaded due to errors.
 
-# Удаляем файл /etc/ named/dynamic/ named.ddns.lab.view1.jnl,
-# перезапускаем сервис DNS сервера systemctl restart named и больше не видим ошибок, 
-# теперь динамическое обновление выполняется успешно.
+# РЈРґР°Р»СЏРµРј С„Р°Р№Р» /etc/ named/dynamic/ named.ddns.lab.view1.jnl,
+# РїРµСЂРµР·Р°РїСѓСЃРєР°РµРј СЃРµСЂРІРёСЃ DNS СЃРµСЂРІРµСЂР° systemctl restart named Рё Р±РѕР»СЊС€Рµ РЅРµ РІРёРґРёРј РѕС€РёР±РѕРє, 
+# С‚РµРїРµСЂСЊ РґРёРЅР°РјРёС‡РµСЃРєРѕРµ РѕР±РЅРѕРІР»РµРЅРёРµ РІС‹РїРѕР»РЅСЏРµС‚СЃСЏ СѓСЃРїРµС€РЅРѕ.
 
            [root@ns01 vagrant]# systemctl status named
            ? named.service - Berkeley Internet Name Domain (DNS)
@@ -310,12 +310,12 @@
            Mar 12 07:55:02 ns01 named[7072]: client @0x7f61fc09df00 192.168.50.15#26071/key zonetransfer.key: view view1: signer "zonetransfer.key" approved
 
 
-# Итого по второй части задания:
-Причина неработоспособности механизма обновления заключается в том что Selinux блокировал доступ к обновлению файлов динамического обновления для DNS сервера, 
-а также к некоторым файлам ОС, к которым DNS сервер (/usr/sbin/named) обращается во время своей работы (указаны выше, взяты из логов сервера). 
-Кроме того рекомендуется удалить файл с расширением .jnl (или прописать контекст безопасности), куда записываются динамические обновления зоны. 
-Так как прежде чем данные попадают в .jnl файл, они сначала записываются во временный файл tmp, для которого может срабатывать блокировка (как в моем случае), поэтому tmp файлы также рекомендуется или удалить или прописать им контекст безопасности. 
-Временные файлы можно найти:
+# РС‚РѕРіРѕ РїРѕ РІС‚РѕСЂРѕР№ С‡Р°СЃС‚Рё Р·Р°РґР°РЅРёСЏ:
+РџСЂРёС‡РёРЅР° РЅРµСЂР°Р±РѕС‚РѕСЃРїРѕСЃРѕР±РЅРѕСЃС‚Рё РјРµС…Р°РЅРёР·РјР° РѕР±РЅРѕРІР»РµРЅРёСЏ Р·Р°РєР»СЋС‡Р°РµС‚СЃСЏ РІ С‚РѕРј С‡С‚Рѕ Selinux Р±Р»РѕРєРёСЂРѕРІР°Р» РґРѕСЃС‚СѓРї Рє РѕР±РЅРѕРІР»РµРЅРёСЋ С„Р°Р№Р»РѕРІ РґРёРЅР°РјРёС‡РµСЃРєРѕРіРѕ РѕР±РЅРѕРІР»РµРЅРёСЏ РґР»СЏ DNS СЃРµСЂРІРµСЂР°, 
+Р° С‚Р°РєР¶Рµ Рє РЅРµРєРѕС‚РѕСЂС‹Рј С„Р°Р№Р»Р°Рј РћРЎ, Рє РєРѕС‚РѕСЂС‹Рј DNS СЃРµСЂРІРµСЂ (/usr/sbin/named) РѕР±СЂР°С‰Р°РµС‚СЃСЏ РІРѕ РІСЂРµРјСЏ СЃРІРѕРµР№ СЂР°Р±РѕС‚С‹ (СѓРєР°Р·Р°РЅС‹ РІС‹С€Рµ, РІР·СЏС‚С‹ РёР· Р»РѕРіРѕРІ СЃРµСЂРІРµСЂР°). 
+РљСЂРѕРјРµ С‚РѕРіРѕ СЂРµРєРѕРјРµРЅРґСѓРµС‚СЃСЏ СѓРґР°Р»РёС‚СЊ С„Р°Р№Р» СЃ СЂР°СЃС€РёСЂРµРЅРёРµРј .jnl (РёР»Рё РїСЂРѕРїРёСЃР°С‚СЊ РєРѕРЅС‚РµРєСЃС‚ Р±РµР·РѕРїР°СЃРЅРѕСЃС‚Рё), РєСѓРґР° Р·Р°РїРёСЃС‹РІР°СЋС‚СЃСЏ РґРёРЅР°РјРёС‡РµСЃРєРёРµ РѕР±РЅРѕРІР»РµРЅРёСЏ Р·РѕРЅС‹. 
+РўР°Рє РєР°Рє РїСЂРµР¶РґРµ С‡РµРј РґР°РЅРЅС‹Рµ РїРѕРїР°РґР°СЋС‚ РІ .jnl С„Р°Р№Р», РѕРЅРё СЃРЅР°С‡Р°Р»Р° Р·Р°РїРёСЃС‹РІР°СЋС‚СЃСЏ РІРѕ РІСЂРµРјРµРЅРЅС‹Р№ С„Р°Р№Р» tmp, РґР»СЏ РєРѕС‚РѕСЂРѕРіРѕ РјРѕР¶РµС‚ СЃСЂР°Р±Р°С‚С‹РІР°С‚СЊ Р±Р»РѕРєРёСЂРѕРІРєР° (РєР°Рє РІ РјРѕРµРј СЃР»СѓС‡Р°Рµ), РїРѕСЌС‚РѕРјСѓ tmp С„Р°Р№Р»С‹ С‚Р°РєР¶Рµ СЂРµРєРѕРјРµРЅРґСѓРµС‚СЃСЏ РёР»Рё СѓРґР°Р»РёС‚СЊ РёР»Рё РїСЂРѕРїРёСЃР°С‚СЊ РёРј РєРѕРЅС‚РµРєСЃС‚ Р±РµР·РѕРїР°СЃРЅРѕСЃС‚Рё. 
+Р’СЂРµРјРµРЅРЅС‹Рµ С„Р°Р№Р»С‹ РјРѕР¶РЅРѕ РЅР°Р№С‚Рё:
 
 [root@ns01 vagrant]# ls -l /etc/named/dynamic/
 total 32
@@ -329,16 +329,16 @@ total 32
 -rw-r--r--. 1 named named 348 Mar 12 08:57 tmp-csgM4QDJR7
 
 
-#Считаю что можно использовать или компиляцию модулей SELINUX или изменения контекста безопасности для файлов SELINUX
-#(просмотр контекста на файлах и директорияхls -lZ),
-#к которым обращается BIND, оба эти способа специально предназначены разработчиками Selinux для того чтобы решать подобные проблемы.
+#РЎС‡РёС‚Р°СЋ С‡С‚Рѕ РјРѕР¶РЅРѕ РёСЃРїРѕР»СЊР·РѕРІР°С‚СЊ РёР»Рё РєРѕРјРїРёР»СЏС†РёСЋ РјРѕРґСѓР»РµР№ SELINUX РёР»Рё РёР·РјРµРЅРµРЅРёСЏ РєРѕРЅС‚РµРєСЃС‚Р° Р±РµР·РѕРїР°СЃРЅРѕСЃС‚Рё РґР»СЏ С„Р°Р№Р»РѕРІ SELINUX
+#(РїСЂРѕСЃРјРѕС‚СЂ РєРѕРЅС‚РµРєСЃС‚Р° РЅР° С„Р°Р№Р»Р°С… Рё РґРёСЂРµРєС‚РѕСЂРёСЏС…ls -lZ),
+#Рє РєРѕС‚РѕСЂС‹Рј РѕР±СЂР°С‰Р°РµС‚СЃСЏ BIND, РѕР±Р° СЌС‚Рё СЃРїРѕСЃРѕР±Р° СЃРїРµС†РёР°Р»СЊРЅРѕ РїСЂРµРґРЅР°Р·РЅР°С‡РµРЅС‹ СЂР°Р·СЂР°Р±РѕС‚С‡РёРєР°РјРё Selinux РґР»СЏ С‚РѕРіРѕ С‡С‚РѕР±С‹ СЂРµС€Р°С‚СЊ РїРѕРґРѕР±РЅС‹Рµ РїСЂРѕР±Р»РµРјС‹.
        
-#Кроме данных способов существуют также способы:
+#РљСЂРѕРјРµ РґР°РЅРЅС‹С… СЃРїРѕСЃРѕР±РѕРІ СЃСѓС‰РµСЃС‚РІСѓСЋС‚ С‚Р°РєР¶Рµ СЃРїРѕСЃРѕР±С‹:
 
-#Выключить Selinux совсем (не рекомендуется)
-#изменить контекст тех файлов, к которым DNS серверу затруднен доступ командам semanage fcontext -a -t FILE_TYPE named.ddns.lab.view1.jnl,
-#где назначить файлам один из следующих типов контекста безопасности dnssec_trigger_var_run_t, ipa_var_lib_t, krb5_host_rcache_t, krb5_keytab_t,
+#Р’С‹РєР»СЋС‡РёС‚СЊ Selinux СЃРѕРІСЃРµРј (РЅРµ СЂРµРєРѕРјРµРЅРґСѓРµС‚СЃСЏ)
+#РёР·РјРµРЅРёС‚СЊ РєРѕРЅС‚РµРєСЃС‚ С‚РµС… С„Р°Р№Р»РѕРІ, Рє РєРѕС‚РѕСЂС‹Рј DNS СЃРµСЂРІРµСЂСѓ Р·Р°С‚СЂСѓРґРЅРµРЅ РґРѕСЃС‚СѓРї РєРѕРјР°РЅРґР°Рј semanage fcontext -a -t FILE_TYPE named.ddns.lab.view1.jnl,
+#РіРґРµ РЅР°Р·РЅР°С‡РёС‚СЊ С„Р°Р№Р»Р°Рј РѕРґРёРЅ РёР· СЃР»РµРґСѓСЋС‰РёС… С‚РёРїРѕРІ РєРѕРЅС‚РµРєСЃС‚Р° Р±РµР·РѕРїР°СЃРЅРѕСЃС‚Рё dnssec_trigger_var_run_t, ipa_var_lib_t, krb5_host_rcache_t, krb5_keytab_t,
 #named_cache_t, named_log_t, named_tmp_t, named_var_run_t, named_zone_t,
-#и затем выполнить запись контекста в ядро restorecon -v named.ddns.lab.view1.jnl. 
-#В данном случае приведены примеры для файла named.ddns.lab.view1.jnl, 
-#в данный файл DNS сервер записывает динамические обновления от DNS клиентов.
+#Рё Р·Р°С‚РµРј РІС‹РїРѕР»РЅРёС‚СЊ Р·Р°РїРёСЃСЊ РєРѕРЅС‚РµРєСЃС‚Р° РІ СЏРґСЂРѕ restorecon -v named.ddns.lab.view1.jnl. 
+#Р’ РґР°РЅРЅРѕРј СЃР»СѓС‡Р°Рµ РїСЂРёРІРµРґРµРЅС‹ РїСЂРёРјРµСЂС‹ РґР»СЏ С„Р°Р№Р»Р° named.ddns.lab.view1.jnl, 
+#РІ РґР°РЅРЅС‹Р№ С„Р°Р№Р» DNS СЃРµСЂРІРµСЂ Р·Р°РїРёСЃС‹РІР°РµС‚ РґРёРЅР°РјРёС‡РµСЃРєРёРµ РѕР±РЅРѕРІР»РµРЅРёСЏ РѕС‚ DNS РєР»РёРµРЅС‚РѕРІ.
